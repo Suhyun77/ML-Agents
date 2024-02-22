@@ -640,6 +640,7 @@ GameObject:
   - component: {fileID: 5286068561088372725}
   - component: {fileID: 6146067214294921228}
   - component: {fileID: 3793725830757308425}
+  - component: {fileID: 7815804141311408152}
   m_Layer: 0
   m_Name: Agent
   m_TagString: Untagged
@@ -739,9 +740,9 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 4ccccbbb45f5fdf48adc21b57816788d, type: 3}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 2
   m_BehaviorName: MoveToGoal
   TeamId: 0
   m_UseChildSensors: 1
@@ -767,7 +768,6 @@ MonoBehaviour:
   target: {fileID: 6578267138148334197}
   winMat: {fileID: 2100000, guid: 4726b488278e87d4f805b5bcf1304fd3, type: 2}
   loseMat: {fileID: 2100000, guid: 0e3422aef78879943841a42a22b7b382, type: 2}
-  defaultMat: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
   floorMeshRenderer: {fileID: 669981809632908645}
 --- !u!54 &6146067214294921228
 Rigidbody:
@@ -817,6 +817,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7815804141311408152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4076887600782839958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5c9d521e5ef4759a8246a07d52221e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DecisionPeriod: 5
+  DecisionStep: 0
+  TakeActionsBetweenDecisions: 1
 --- !u!1 &4720857328693890529
 GameObject:
   m_ObjectHideFlags: 0
