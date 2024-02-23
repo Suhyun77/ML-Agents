@@ -3008,7 +3008,19 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2358098573316459477, guid: 10396089958376a4daa5a7af825a4eca, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 4ccccbbb45f5fdf48adc21b57816788d, type: 3}
+    - target: {fileID: 2358098573316459477, guid: 10396089958376a4daa5a7af825a4eca, type: 3}
       propertyPath: m_BehaviorType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2358098573316459477, guid: 10396089958376a4daa5a7af825a4eca, type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.data[0]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2358098573316459477, guid: 10396089958376a4daa5a7af825a4eca, type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.m_NumContinuousActions
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7274233661289467083, guid: 10396089958376a4daa5a7af825a4eca, type: 3}
