@@ -6,10 +6,6 @@ using Random = UnityEngine.Random;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-/*
- * 축구 Agent 블로그 : https://ojui.tistory.com/14
- */
-
 public class CatAgent : Agent
 {
     #region Members
@@ -18,6 +14,8 @@ public class CatAgent : Agent
     [SerializeField] Transform targetRoot;
     [SerializeField] List<Transform> targetList;
     [SerializeField] List<Material> targetMaterials;
+    [SerializeField] Transform gateRoot;
+    [SerializeField] List<Transform> gateList;
 
     [SerializeField] Button feedBtn;
     [SerializeField] GameObject feedObj;
@@ -25,10 +23,11 @@ public class CatAgent : Agent
     private Animator animator;
     #endregion
 
+
     #region Agent Method
     public override void Initialize()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         targetList = new List<Transform>();
         foreach(Transform target in targetRoot)
         {
@@ -41,15 +40,19 @@ public class CatAgent : Agent
             var mat = target.GetComponent<MeshRenderer>().material;
             targetMaterials.Add(mat);
         }
-
+        foreach (Transform gate in gateRoot)
+        {
+            gateList.Add(gate);
+        }
         feedBtn.onClick.AddListener(() => feedObj.SetActive(true));
     }
 
     public override void OnEpisodeBegin()
     {
-        //transform.localPosition = new Vector3(0, transform.localPosition.y, 0);
+        keyState = 0;
+
         InitPlayer();
-        InitTargets();
+        InitTrainEnvironment();
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -60,24 +63,44 @@ public class CatAgent : Agent
             sensor.AddObservation(target.transform.localPosition);
     }
 
-    public override void OnActionReceived(ActionBuffers actions)  // Continuous
+
+    public int keyState;
+    public override void OnActionReceived(ActionBuffers actions)
     {
-        #region continuous ver
-        float moveX = actions.ContinuousActions[0];
-        float moveZ = actions.ContinuousActions[1];
+        MoveAgent(actions);
 
-        var dir = new Vector3(moveX, 0f, moveZ).normalized;
-        transform.localPosition += dir * Time.deltaTime * 1;
-
-        if (dir.magnitude > 0f)
+        switch (keyState)
         {
-            Quaternion targetRot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 10f);
+            case 0:
+                {
+                    if (Vector3.Distance(targetList[0].transform.localPosition, transform.localPosition) <= 0.5f)
+                    {
+                        targetList[0].gameObject.SetActive(false);
+                        gateList[0].gameObject.SetActive(false);
+                        keyState = 1;
+                    }
+                }
+                break;
+            case 1:
+                {
+                    if (Vector3.Distance(targetList[1].transform.localPosition, transform.localPosition) <= 0.5f)
+                    {
+                        targetList[1].gameObject.SetActive(false);
+                        gateList[1].gameObject.SetActive(false);
+                        keyState = 2;
+                    }
+                }
+                break;
+            case 2:
+                {
+                    if (Vector3.Distance(targetList[2].transform.localPosition, transform.localPosition) <= 0.5f)
+                    {
+                        SetReward(1f);
+                        EndEpisode();
+                    }
+                }
+                break;
         }
-        
-        string animParam = dir.magnitude >= 0.1f ? "Walk" : "Idle";
-        animator.SetTrigger(animParam);
-        #endregion
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -92,33 +115,54 @@ public class CatAgent : Agent
     {
         if (other.gameObject.CompareTag("Wall"))
         {
-            SetReward(-1f);
+            AddReward(-1f);
             EndEpisode();
         }
     }
     private void OnTriggerEnter(Collider other)
     {
-        //if (other.CompareTag("Wall"))
+        //if (targetList.Contains(other.transform))
         //{
-        //    SetReward(-1f);
-        //    EndEpisode();
+        //    var idx = targetList.IndexOf(other.transform);
+
+        //    if (other.transform.Equals(targetList[idx]))
+        //    {
+        //        AddReward(idx+1);
+        //        groundMeshRenderer.material = targetMaterials[idx];
+        //        //other.transform.gameObject.SetActive(false);
+
+        //        if (idx+1 == 3)
+        //        {
+        //            SetReward(+1);
+        //            EndEpisode();
+        //        }
+
+        //    }
         //}
 
-        if (targetList.Contains(other.transform))
-        {
-            var idx = targetList.IndexOf(other.transform);
+        //if (targetList.Contains(other.transform))
+        //{
+        //    var idx = targetList.IndexOf(other.transform);
 
-            if (other.transform.Equals(targetList[idx]))
-            {
-                //var reward = idx == 0 ? 1 : 3;
-                SetReward(idx+1);
-                groundMeshRenderer.material = targetMaterials[idx];
-                //other.transform.gameObject.SetActive(false);
+        //    if (other.transform.Equals(targetList[idx]))
+        //    {
+        //        targetList[idx].gameObject.SetActive(false);
+        //        groundMeshRenderer.material = targetMaterials[idx];
+        //        if (idx < gateList.Count)
+        //            gateList[idx].gameObject.SetActive(false);
 
-                if (idx+1 == 3)
-                    EndEpisode();
-            }
-        }
+        //        if (idx == targetList.Count - 1)
+        //        {
+        //            AddReward(+2f);
+        //            EndEpisode();
+        //        }
+        //        else
+        //        {
+        //            AddReward(+1f);
+        //            targetList[idx + 1].gameObject.SetActive(true);
+        //        }
+        //    }
+        //}
     }
 
     private (float, float) GetRandomGroundPos()
@@ -133,18 +177,48 @@ public class CatAgent : Agent
 
     private void InitPlayer()
     {
-        var pos = GetRandomGroundPos();
 
-        transform.localPosition = new Vector3(pos.Item1, transform.localPosition.y, transform.localPosition.z);
-        transform.localRotation = Quaternion.identity;
+        transform.localPosition = new Vector3(0, transform.localPosition.y, 0);
+
+        //var pos = GetRandomGroundPos();
+
+        //transform.localPosition = new Vector3(pos.Item1, transform.localPosition.y, transform.localPosition.z);
+        //transform.localRotation = Quaternion.identity;
     }
 
-    private void InitTargets()
+    private void InitTrainEnvironment()
     {
-        foreach(var target in targetList)
+        foreach (var target in targetList)
+            target.gameObject.SetActive(true);
+
+        foreach (var gate in gateList)
+            gate.gameObject.SetActive(true);
+
+        //foreach(var target in targetList)
+        //{
+        //    var randPos = GetRandomGroundPos();
+        //    target.localPosition = new Vector3(randPos.Item1, target.localPosition.y, target.localPosition.z);
+        //    target.gameObject.SetActive(false);
+        //}
+        //targetList[0].gameObject.SetActive(true);
+    }
+
+    private void MoveAgent(ActionBuffers actionBuffers)
+    {
+        var continuousAction = actionBuffers.ContinuousActions;
+
+        var dir = new Vector3(continuousAction[0], 0f, continuousAction[1]).normalized;
+        transform.localPosition += dir * Time.deltaTime * 1;
+
+        if (dir.magnitude > 0f)
         {
-            var randPos = GetRandomGroundPos();
-            target.localPosition = new Vector3(randPos.Item1, target.localPosition.y, target.localPosition.z);
+            Quaternion targetRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 10f);
         }
+
+        string animParam = dir.magnitude >= 0.1f ? "Walk" : "Idle";
+        animator.SetTrigger(animParam);
+
+        AddReward(-0.0001f);
     }
 }
