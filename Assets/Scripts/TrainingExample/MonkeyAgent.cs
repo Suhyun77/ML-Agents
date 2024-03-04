@@ -3,7 +3,6 @@ using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
 
-// Code Monkey
 public class MonkeyAgent : Agent
 {
     [SerializeField] private Transform target;

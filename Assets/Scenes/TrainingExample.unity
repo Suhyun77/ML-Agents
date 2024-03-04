@@ -2347,6 +2347,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1843292623}
   - component: {fileID: 1843292622}
+  - component: {fileID: 1843292624}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -2431,6 +2432,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &1843292624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843292621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!4 &1844103759 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1912753504891986348, guid: 10396089958376a4daa5a7af825a4eca, type: 3}
@@ -3006,22 +3030,6 @@ PrefabInstance:
     - target: {fileID: 1912753504891986348, guid: 10396089958376a4daa5a7af825a4eca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2358098573316459477, guid: 10396089958376a4daa5a7af825a4eca, type: 3}
-      propertyPath: m_Model
-      value: 
-      objectReference: {fileID: 5022602860645237092, guid: 4ccccbbb45f5fdf48adc21b57816788d, type: 3}
-    - target: {fileID: 2358098573316459477, guid: 10396089958376a4daa5a7af825a4eca, type: 3}
-      propertyPath: m_BehaviorType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2358098573316459477, guid: 10396089958376a4daa5a7af825a4eca, type: 3}
-      propertyPath: m_BrainParameters.VectorActionSize.Array.data[0]
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2358098573316459477, guid: 10396089958376a4daa5a7af825a4eca, type: 3}
-      propertyPath: m_BrainParameters.m_ActionSpec.m_NumContinuousActions
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7274233661289467083, guid: 10396089958376a4daa5a7af825a4eca, type: 3}
       propertyPath: m_Name
