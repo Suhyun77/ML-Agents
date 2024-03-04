@@ -95,7 +95,7 @@ public class CatAgent : Agent
             if (idx == targetList.Count - 1)
             {
                 SetReward(+1f);
-                //EndEpisode();
+                EndEpisode();  // for train
             }
         }
     }

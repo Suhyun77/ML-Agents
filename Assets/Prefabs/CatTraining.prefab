@@ -1994,8 +1994,8 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 5000
-  moveSpeed: 1
+  MaxStep: 100000
+  moveSpeed: 0.7
   groundCol: {fileID: 7310929844441067316}
   targetRoot: {fileID: 4174015044876323549}
   targetList: []
@@ -2025,9 +2025,9 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: aa4b8a9d5ee8c43498cd701c32bccd77, type: 3}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 2
   m_BehaviorName: CatBrain
   TeamId: 0
   m_UseChildSensors: 1
