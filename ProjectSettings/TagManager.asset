@@ -8,6 +8,9 @@ TagManager:
   - ground
   - agent
   - Target
+  - Target2
+  - Target3
+  - Target4
   layers:
   - Default
   - TransparentFX
