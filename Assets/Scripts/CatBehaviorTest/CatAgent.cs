@@ -18,8 +18,8 @@ public class CatAgent : Agent
     [SerializeField] TMP_Text agentScoreTxt;
 
     public Animator animator;
-    private int agentScore;
-    private bool isTargetActive;
+    public int agentScore;
+    public bool isTargetActive;
     #endregion
 
     #region Agent Method
@@ -37,11 +37,10 @@ public class CatAgent : Agent
 
     public override void OnEpisodeBegin()
     {
-        agentScore = 0;
-        agentScoreTxt.text = "0";
-
         InitPlayer();
         InitTrainEnvironment();
+
+        //transform.localPosition = new Vector3(0, 0.066f, 0);
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -54,13 +53,17 @@ public class CatAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        isTargetActive = targetList[0].gameObject.activeSelf;
-
         if (isTargetActive)
             MoveAgent(actions);
         else
             animator.SetTrigger("Sit");
 
+        if (agentScore == targetList.Count)
+        {
+            Debug.Log("Finish!");
+            SetReward(1);
+            EndEpisode();
+        }
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -83,20 +86,25 @@ public class CatAgent : Agent
     {
         if (other.gameObject.CompareTag("Target"))
         {
-            var idx = targetList.IndexOf(other.transform);
+            //var idx = targetList.IndexOf(other.transform);
 
-            targetList[idx].gameObject.SetActive(false);
-            if (idx < targetList.Count-1)
-                targetList[idx + 1].gameObject.SetActive(true);
+            //targetList[idx].gameObject.SetActive(false);
+            //if (idx < targetList.Count - 1)
+            //    targetList[idx + 1].gameObject.SetActive(true);
 
             agentScore += 1;
             agentScoreTxt.text = agentScore.ToString();
 
-            if (idx == targetList.Count - 1)
-            {
-                SetReward(+1f);
-                //EndEpisode();
-            }
+            //if (idx == targetList.Count - 1)
+            //{
+            //    SetReward(+1f);
+            //    EndEpisode();  // for train
+            //}
+
+            other.gameObject.SetActive(false);
+            isTargetActive = false;
+
+            SetRandomTarget();
         }
     }
 
@@ -112,21 +120,36 @@ public class CatAgent : Agent
 
     private void InitPlayer()
     {
-        var pos = GetRandomGroundPos();
+        agentScore = 0;
+        agentScoreTxt.text = "0";
 
+        var pos = GetRandomGroundPos();
         transform.localPosition = new Vector3(pos.Item1, transform.localPosition.y, pos.Item2);
         transform.localRotation = Quaternion.identity;
     }
 
+    bool isRightPos;
     private void InitTrainEnvironment()
     {
         foreach (var target in targetList)
-        {
-            var randPos = GetRandomGroundPos();
-            target.localPosition = new Vector3(randPos.Item1, target.localPosition.y, randPos.Item2);
             target.gameObject.SetActive(false);
-        }
-        targetList[0].gameObject.SetActive(true);
+
+        SetRandomTarget();
+
+        //isRightPos = false;
+        //while (true)
+        //{
+        //    var targetCol = GetTargetRandomPos();
+
+        //    foreach (var ob in obstacles)
+        //    {
+        //        bool isIntersect = ob.bounds.Intersects(targetCol.bounds) ? false : true;
+        //        isRightPos = 
+        //    }
+
+        //    if (isRightPos)
+
+        //}
     }
 
     private void MoveAgent(ActionBuffers actionBuffers)
@@ -146,5 +169,14 @@ public class CatAgent : Agent
         animator.SetTrigger(animParam);
 
         AddReward(-0.001f);
+    }
+
+    private void SetRandomTarget()
+    {
+        var randIdx = Random.Range(0, targetList.Count);
+        var randPos = GetRandomGroundPos();
+        targetList[randIdx].localPosition = new Vector3(randPos.Item1, targetList[randIdx].localPosition.y, randPos.Item2);
+        targetList[randIdx].gameObject.SetActive(true);
+        isTargetActive = true;
     }
 }
