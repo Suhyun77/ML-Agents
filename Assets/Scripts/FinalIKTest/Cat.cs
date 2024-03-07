@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Cat : MonoBehaviour
 {
-    public InteractionObject ball;
+    public InteractionObject interactionObj;
     public OffsetPose holdPose; 
 
     private float holdWeight;
@@ -13,12 +13,13 @@ public class Cat : MonoBehaviour
 
     IEnumerator OnInteract()
     {
-        ik = ball.lastUsedInteractionSystem.GetComponent<FullBodyBipedIK>();
+        interactionObj = GetComponent<InteractionObject>();
+        ik = interactionObj.lastUsedInteractionSystem.GetComponent<FullBodyBipedIK>();
         interactionSystem = GetComponent<InteractionSystem>();
 
         // set right shoulder, hand
-        ik.solver.rightHandEffector.positionWeight = 0.5f;
-        ik.solver.rightShoulderEffector.positionWeight = 0.03f;
+        //ik.solver.rightHandEffector.positionWeight = 0.5f;
+        //ik.solver.rightShoulderEffector.positionWeight = 0.03f;
 
         while (holdWeight < 1f)
         {
