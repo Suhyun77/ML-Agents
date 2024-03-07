@@ -5,10 +5,15 @@ using Unity.MLAgents.Actuators;
 using Random = UnityEngine.Random;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Sentis;
+using Unity.MLAgentsExamples;
 
 public class CatAgent : Agent
 {
     #region Members
+    [SerializeField] ModelAsset target1Brain;
+    [SerializeField] ModelAsset target2Brain;
+
     [SerializeField] float moveSpeed = 1f;
     [SerializeField] Collider groundCol;
     [SerializeField] Transform targetRoot;
@@ -16,6 +21,10 @@ public class CatAgent : Agent
     [SerializeField] Transform gateRoot;
     [SerializeField] List<Transform> gateList;
     [SerializeField] TMP_Text agentScoreTxt;
+
+    private string target1BehaviorName = "target1";
+    private string target2BehaviorName = "target2";
+    private int configuration;
 
     public Animator animator;
     public int agentScore;
@@ -33,14 +42,23 @@ public class CatAgent : Agent
             if (target.gameObject.activeSelf)
                 targetList.Add(target);
         }
+
+        var modelOverrider = GetComponent<ModelOverrider>();
+        if (modelOverrider.HasOverrides)
+        {
+            target1Brain = modelOverrider.GetModelForBehaviorName(target1BehaviorName);
+            target1BehaviorName = ModelOverrider.GetOverrideBehaviorName(target1BehaviorName);
+
+            target2Brain = modelOverrider.GetModelForBehaviorName(target2BehaviorName);
+            target2BehaviorName = ModelOverrider.GetOverrideBehaviorName(target2BehaviorName);
+        }
     }
 
     public override void OnEpisodeBegin()
     {
         InitPlayer();
         InitTrainEnvironment();
-
-        //transform.localPosition = new Vector3(0, 0.066f, 0);
+        //ConfigureAgent(configuration);
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -57,13 +75,6 @@ public class CatAgent : Agent
             MoveAgent(actions);
         else
             animator.SetTrigger("Sit");
-
-        if (agentScore == targetList.Count)
-        {
-            Debug.Log("Finish!");
-            SetReward(1);
-            EndEpisode();
-        }
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -73,6 +84,15 @@ public class CatAgent : Agent
         continuousAction[1] = Input.GetAxisRaw("Vertical");
     }
     #endregion
+
+    private void FixedUpdate()
+    {
+        //if (configuration != -1)
+        //{
+        //    ConfigureAgent(configuration);
+        //    configuration = -1;
+        //}
+    }
 
     private void OnCollisionEnter(Collision other)
     {
@@ -104,7 +124,8 @@ public class CatAgent : Agent
             other.gameObject.SetActive(false);
             isTargetActive = false;
 
-            SetRandomTarget();
+            SetReward(1);
+            EndEpisode();
         }
     }
 
@@ -128,7 +149,6 @@ public class CatAgent : Agent
         transform.localRotation = Quaternion.identity;
     }
 
-    bool isRightPos;
     private void InitTrainEnvironment()
     {
         foreach (var target in targetList)
@@ -175,8 +195,22 @@ public class CatAgent : Agent
     {
         var randIdx = Random.Range(0, targetList.Count);
         var randPos = GetRandomGroundPos();
+        configuration = randIdx;
         targetList[randIdx].localPosition = new Vector3(randPos.Item1, targetList[randIdx].localPosition.y, randPos.Item2);
         targetList[randIdx].gameObject.SetActive(true);
         isTargetActive = true;
+    }
+
+    private void ConfigureAgent(int config)
+    {
+        switch (config)
+        {
+            case 0:
+                SetModel(target1BehaviorName, target1Brain);
+                break;
+            case 1:
+                SetModel(target2BehaviorName, target2Brain);
+                break;
+        }
     }
 }
