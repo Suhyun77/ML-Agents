@@ -7,9 +7,13 @@ using System.Collections.Generic;
 using TMPro;
 using Cysharp.Threading.Tasks;
 using System;
+using Google.Protobuf.WellKnownTypes;
+using Unity.VisualScripting;
+using UnityEngine.UI;
 
-public enum TargetState { None, target1, target2 }
+public enum TargetState { None, target1, target2, target3 }
 
+#region Past Code
 //public class SequentialAgent : Agent
 //{
 //    #region Members
@@ -146,7 +150,7 @@ public enum TargetState { None, target1, target2 }
 //        AddReward(-0.001f);
 //    }
 //}
-
+#endregion
 
 public class SequentialAgent : Agent
 {
@@ -159,11 +163,13 @@ public class SequentialAgent : Agent
     [SerializeField] Transform gateRoot;
     [SerializeField] List<Transform> gateList;
     [SerializeField] TMP_Text agentScoreTxt;
+    [SerializeField] Button touchCatBtn;
 
     public Animator animator;
     public int agentScore;
     public bool isTargetActive;
     public int currActiveTargetCount;
+    public bool isTouchFinished;
 
     #endregion
 
@@ -177,6 +183,8 @@ public class SequentialAgent : Agent
         {
             targetList.Add(targetRoot.GetChild(i));
         }
+
+        // currTargetState = TargetState.None;
     }
 
     public override void OnEpisodeBegin()
@@ -227,12 +235,20 @@ public class SequentialAgent : Agent
             other.gameObject.SetActive(false);
             AddReward(1);
 
+            if (other.gameObject.name == "Target2")
+            {
+                GetComponent<SequentialAgent>().enabled = false;
+                animator.SetTrigger("Sit");
+                await UniTask.WaitUntil(() => isTouchFinished);
+                GetComponent<SequentialAgent>().enabled = true;
+            }
+
             if (currActiveTargetCount == 0)
             {
                 Debug.Log("End");
                 isTargetActive = false;
                 animator.SetTrigger("Sit");
-                await UniTask.Delay(TimeSpan.FromSeconds(10));
+                await UniTask.Delay(TimeSpan.FromSeconds(5));
                 InitTrainEnvironment();
             }
         }
@@ -262,9 +278,9 @@ public class SequentialAgent : Agent
     {
         foreach (var target in targetList)
         {
-            target.gameObject.SetActive(false);
-            var randPos = GetRandomGroundPos();
-            target.localPosition = new Vector3(randPos.Item1, target.localPosition.y, randPos.Item2);
+            // target.gameObject.SetActive(false);
+            // var randPos = GetRandomGroundPos();
+            // target.localPosition = new Vector3(randPos.Item1, target.localPosition.y, randPos.Item2);
             target.gameObject.SetActive(true);
         }
         currActiveTargetCount = activeTargetCount;
@@ -292,4 +308,19 @@ public class SequentialAgent : Agent
         }
         AddReward(-0.001f);
     }
+
+    // private void SetTargetState(TargetState state)
+    // {
+    //     switch(state)
+    //     {
+    //         // 
+    //         case TargetState.target1:
+
+    //             break;
+    //         case TargetState.target2:
+    //             break;
+    //         case TargetState.target3:
+    //             break;
+    //     }
+    // }
 }
