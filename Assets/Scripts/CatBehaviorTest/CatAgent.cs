@@ -37,14 +37,13 @@ public class CatAgent : Agent
         animator = GetComponent<Animator>();
 
         targetList = new List<Transform>();
-        foreach (Transform target in targetRoot)
+        for (int i = 0; i < 2; i++)
         {
-            if (target.gameObject.activeSelf)
-                targetList.Add(target);
+            targetList.Add(targetRoot.GetChild(i));
         }
 
         var modelOverrider = GetComponent<ModelOverrider>();
-        if (modelOverrider.HasOverrides)
+        if (modelOverrider.HasOverrides) 
         {
             target1Brain = modelOverrider.GetModelForBehaviorName(target1BehaviorName);
             target1BehaviorName = ModelOverrider.GetOverrideBehaviorName(target1BehaviorName);
@@ -58,7 +57,7 @@ public class CatAgent : Agent
     {
         InitPlayer();
         InitTrainEnvironment();
-        //ConfigureAgent(configuration);
+        // ConfigureAgent(configuration);
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -87,11 +86,12 @@ public class CatAgent : Agent
 
     private void FixedUpdate()
     {
-        //if (configuration != -1)
-        //{
-        //    ConfigureAgent(configuration);
-        //    configuration = -1;
-        //}
+        if (configuration != -1)
+        {
+            Debug.Log("Configure Agent");
+            ConfigureAgent(configuration);
+            configuration = -1;
+        }
     }
 
     private void OnCollisionEnter(Collision other)
@@ -122,10 +122,18 @@ public class CatAgent : Agent
             //}
 
             other.gameObject.SetActive(false);
-            isTargetActive = false;
 
             SetReward(1);
             EndEpisode();
+
+            //if (agentScore == 2)
+            //{
+            //    Debug.Log("agentScore = 2");
+            //    Debug.Log("get 1 reward");
+
+            //    SetReward(1);
+            //    EndEpisode();
+            //}
         }
     }
 
@@ -151,25 +159,16 @@ public class CatAgent : Agent
 
     private void InitTrainEnvironment()
     {
-        foreach (var target in targetList)
-            target.gameObject.SetActive(false);
+        //foreach (var target in targetList)
+        //{
+        //    target.gameObject.SetActive(false);
+        //    var randPos = GetRandomGroundPos();
+        //    target.localPosition = new Vector3(randPos.Item1, target.localPosition.y, randPos.Item2);
+        //    target.gameObject.SetActive(true);
+        //}
+        //isTargetActive = true;
 
         SetRandomTarget();
-
-        //isRightPos = false;
-        //while (true)
-        //{
-        //    var targetCol = GetTargetRandomPos();
-
-        //    foreach (var ob in obstacles)
-        //    {
-        //        bool isIntersect = ob.bounds.Intersects(targetCol.bounds) ? false : true;
-        //        isRightPos = 
-        //    }
-
-        //    if (isRightPos)
-
-        //}
     }
 
     private void MoveAgent(ActionBuffers actionBuffers)
@@ -179,7 +178,7 @@ public class CatAgent : Agent
         var dir = new Vector3(continuousAction[0], 0f, continuousAction[1]).normalized;
         transform.localPosition += dir * Time.deltaTime * moveSpeed;
 
-        if (dir.magnitude > 0f)
+        if (dir.magnitude > 0)
         {
             Quaternion targetRot = Quaternion.LookRotation(dir);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 7f);
@@ -206,9 +205,11 @@ public class CatAgent : Agent
         switch (config)
         {
             case 0:
+                Debug.Log("Target1");
                 SetModel(target1BehaviorName, target1Brain);
                 break;
             case 1:
+                Debug.Log("Target2");
                 SetModel(target2BehaviorName, target2Brain);
                 break;
         }
