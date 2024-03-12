@@ -57,7 +57,7 @@ public class CatAgent : Agent
     {
         InitPlayer();
         InitTrainEnvironment();
-        ConfigureAgent(configuration);
+        // ConfigureAgent(configuration);
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -86,11 +86,12 @@ public class CatAgent : Agent
 
     private void FixedUpdate()
     {
-        //if (configuration != -1)
-        //{
-        //    ConfigureAgent(configuration);
-        //    configuration = -1;
-        //}
+        if (configuration != -1)
+        {
+            Debug.Log("Configure Agent");
+            ConfigureAgent(configuration);
+            configuration = -1;
+        }
     }
 
     private void OnCollisionEnter(Collision other)
@@ -122,14 +123,17 @@ public class CatAgent : Agent
 
             other.gameObject.SetActive(false);
 
-            if (agentScore == 2)
-            {
-                Debug.Log("agentScore = 2");
-                Debug.Log("get 1 reward");
+            SetReward(1);
+            EndEpisode();
 
-                SetReward(1);
-                EndEpisode();
-            }
+            //if (agentScore == 2)
+            //{
+            //    Debug.Log("agentScore = 2");
+            //    Debug.Log("get 1 reward");
+
+            //    SetReward(1);
+            //    EndEpisode();
+            //}
         }
     }
 
@@ -201,9 +205,11 @@ public class CatAgent : Agent
         switch (config)
         {
             case 0:
+                Debug.Log("Target1");
                 SetModel(target1BehaviorName, target1Brain);
                 break;
             case 1:
+                Debug.Log("Target2");
                 SetModel(target2BehaviorName, target2Brain);
                 break;
         }

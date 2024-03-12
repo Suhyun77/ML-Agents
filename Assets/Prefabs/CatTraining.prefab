@@ -219,7 +219,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1105824470524734441
 Transform:
   m_ObjectHideFlags: 0
@@ -651,7 +651,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6259494386269705383
 Transform:
   m_ObjectHideFlags: 0
@@ -695,7 +695,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fb6a1247f0458044a926ae07c11e1a73, type: 2}
+  - {fileID: 2100000, guid: 8476cade671e83d42a05e0ffbff96322, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1505,7 +1505,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3394665182368463805
 Transform:
   m_ObjectHideFlags: 0
@@ -1549,7 +1549,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4726b488278e87d4f805b5bcf1304fd3, type: 2}
+  - {fileID: 2100000, guid: 8476cade671e83d42a05e0ffbff96322, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1994,14 +1994,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1375156563019551512}
-  - component: {fileID: 6076833404655107401}
+  - component: {fileID: 8280797678069712177}
   - component: {fileID: 3676945653798620825}
   - component: {fileID: 4378503844194974568}
   - component: {fileID: 5220506688444981646}
   - component: {fileID: 7790568326743293818}
   - component: {fileID: 4564524236667915936}
-  - component: {fileID: 2002517793854793004}
   - component: {fileID: 4917919176398375221}
+  - component: {fileID: 280392689186196042}
   m_Layer: 0
   m_Name: CatAgent
   m_TagString: Untagged
@@ -2027,7 +2027,7 @@ Transform:
   - {fileID: 542008332779449943}
   m_Father: {fileID: 5628144051699058386}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
---- !u!114 &6076833404655107401
+--- !u!114 &8280797678069712177
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2036,15 +2036,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4857492543359102254}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2b4a7ff548a14b4d99441efd05fc775, type: 3}
+  m_Script: {fileID: 11500000, guid: efb340ac9f08db6469c689833ace550f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  MaxStep: 1500
-  target1Brain: {fileID: 5022602860645237092, guid: 12254958200b5a34dac0d1b0abfddb73, type: 3}
-  target2Brain: {fileID: 5022602860645237092, guid: 814cc79addf52934786a61978a9469da, type: 3}
+  MaxStep: 5000000
+  activeTargetCount: 3
   moveSpeed: 0.7
   groundCol: {fileID: 7310929844441067316}
   targetRoot: {fileID: 4174015044876323549}
@@ -2052,9 +2051,10 @@ MonoBehaviour:
   gateRoot: {fileID: 7076881104726370752}
   gateList: []
   agentScoreTxt: {fileID: 3624043360310202407}
-  animator: {fileID: 0}
+  animator: {fileID: 4564524236667915936}
   agentScore: 0
   isTargetActive: 0
+  currActiveTargetCount: 0
 --- !u!114 &3676945653798620825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2068,7 +2068,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 9
+    VectorObservationSize: 13
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 2
@@ -2077,9 +2077,9 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: b850baaf5dd379c4f8f3a1fc5e50253e, type: 3}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 2
   m_BehaviorName: CatBrain
   TeamId: 0
   m_UseChildSensors: 1
@@ -2172,7 +2172,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2002517793854793004
+--- !u!114 &4917919176398375221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4857492543359102254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a6da8f78a394c6ab027688eab81e04d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugCommandLineOverride: 
+--- !u!114 &280392689186196042
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2195,20 +2208,7 @@ MonoBehaviour:
     UseLocalSpaceLinearVelocity: 0
     UseJointPositionsAndAngles: 0
     UseJointForces: 0
-  sensorName: ' CatAgentSensor'
---- !u!114 &4917919176398375221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4857492543359102254}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a6da8f78a394c6ab027688eab81e04d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debugCommandLineOverride: 
+  sensorName: 
 --- !u!1 &4930046286977244898
 GameObject:
   m_ObjectHideFlags: 0
