@@ -6,8 +6,6 @@
     "com.unity.ide.rider": "3.0.26",
     "com.unity.ide.vscode": "1.2.5",
     "com.unity.inputsystem": "1.7.0",
-    "com.unity.ml-agents": "file:C:/Users/rkdtn/ml-agents/com.unity.ml-agents",
-    "com.unity.ml-agents.extensions": "file:C:/Users/rkdtn/ml-agents/com.unity.ml-agents.extensions",
     "com.unity.nuget.newtonsoft-json": "3.0.2",
     "com.unity.recorder": "4.0.2",
     "com.unity.render-pipelines.universal": "14.0.9",
@@ -46,6 +44,8 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0"
+    "com.unity.modules.xr": "1.0.0",
+    "com.unity.ml-agents": "git+https://github.com/Unity-Technologies/ml-agents.git?path=com.unity.ml-agents#release_21",
+    "com.unity.ml-agents.extensions": "git+https://github.com/Unity-Technologies/ml-agents.git?path=com.unity.ml-agents.extensions#release_21"
   }
 }
