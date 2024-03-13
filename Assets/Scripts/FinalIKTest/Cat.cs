@@ -18,8 +18,8 @@ public class Cat : MonoBehaviour
         interactionSystem = GetComponent<InteractionSystem>();
 
         // set right shoulder, hand
-        //ik.solver.rightHandEffector.positionWeight = 0.5f;
-        //ik.solver.rightShoulderEffector.positionWeight = 0.03f;
+        ik.solver.rightHandEffector.positionWeight = 0.5f;
+        ik.solver.rightShoulderEffector.positionWeight = 0.03f;
 
         while (holdWeight < 1f)
         {

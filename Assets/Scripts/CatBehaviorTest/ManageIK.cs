@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using RootMotion.FinalIK;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ManageIK : MonoBehaviour
 {   
@@ -11,6 +12,10 @@ public class ManageIK : MonoBehaviour
 
     public GameObject headPivot;
     public Transform target;
+
+    public float pivotRotY;
+    public float distance;
+    public Button touchCatBtn;
 
     private void Start()
     {
@@ -21,15 +26,22 @@ public class ManageIK : MonoBehaviour
     {
         headPivot.transform.LookAt(target);
         
-        float pivotRotY = headPivot.transform.localRotation.y;
-        float distance = Vector3.Distance(headPivot.transform.position, target.position);
+        pivotRotY = headPivot.transform.localRotation.y;
+        distance = Vector3.Distance(headPivot.transform.position, target.position);
         if (pivotRotY < 0.5f && pivotRotY > -0.5f && distance < 2f)
         {
+            // if (!touchCatBtn.gameObject.activeSelf)
+            //     touchCatBtn.gameObject.SetActive(true);
             look.solver.IKPosition = target.position;
             look.solver.IKPositionWeight = Mathf.Lerp(lookWeight, 1, Time.deltaTime * 2.5f);
             lookWeight = look.solver.IKPositionWeight;
         }
         else
+        {
+            // if (touchCatBtn.gameObject.activeSelf)
+            //     touchCatBtn.gameObject.SetActive(false);
             look.solver.IKPositionWeight = 0f;
+        }
+            
     }
 }
