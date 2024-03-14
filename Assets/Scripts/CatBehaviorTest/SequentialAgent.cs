@@ -165,6 +165,8 @@ public class SequentialAgent : Agent
     public bool isTargetActive;
     public int currActiveTargetCount;
 
+    private Transform currTarget;
+
     #endregion
 
     #region Agent Method
@@ -189,8 +191,10 @@ public class SequentialAgent : Agent
     {
         sensor.AddObservation(transform.localPosition);
 
-        foreach (var target in targetList)
-            sensor.AddObservation(target.transform.localPosition);
+        //foreach (var target in targetList)
+        //    sensor.AddObservation(target.transform.localPosition);
+
+        sensor.AddObservation(currTarget.localPosition);
 
         sensor.AddObservation(currActiveTargetCount);
     }
@@ -199,6 +203,8 @@ public class SequentialAgent : Agent
     {
         if (isTargetActive)
             MoveAgent(actions);
+        else
+            animator.SetTrigger("Sit");
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -227,14 +233,18 @@ public class SequentialAgent : Agent
             other.gameObject.SetActive(false);
             AddReward(1);
 
-            if (currActiveTargetCount == 0)
-            {
-                Debug.Log("End");
+            //if (agentScore == 1)
+            //{
+                Debug.Log("Target : " + other.gameObject.name);
                 isTargetActive = false;
-                animator.SetTrigger("Sit");
+
+                // For Train
+                //EndEpisode();
+
+                // For Apply Model
                 await UniTask.Delay(TimeSpan.FromSeconds(10));
                 InitTrainEnvironment();
-            }
+            //}
         }
     }
 
@@ -260,13 +270,20 @@ public class SequentialAgent : Agent
 
     private void InitTrainEnvironment()
     {
-        foreach (var target in targetList)
-        {
-            target.gameObject.SetActive(false);
-            var randPos = GetRandomGroundPos();
-            target.localPosition = new Vector3(randPos.Item1, target.localPosition.y, randPos.Item2);
-            target.gameObject.SetActive(true);
-        }
+        //var randIdx = Random.Range(0, activeTargetCount);
+        //var randPos = GetRandomGroundPos();
+        //targetList[randIdx].transform.localPosition = new Vector3(randPos.Item1, targetList[randIdx].transform.localPosition.y, randPos.Item2);
+        currTarget = targetList[2].transform;
+        currTarget.gameObject.SetActive(true);
+
+        //foreach (var target in targetList)
+        //{
+        //    target.gameObject.SetActive(false);
+        //    var randPos = GetRandomGroundPos();
+        //    target.localPosition = new Vector3(randPos.Item1, target.localPosition.y, randPos.Item2);
+        //    //target.gameObject.SetActive(true);
+        //}
+
         currActiveTargetCount = activeTargetCount;
         isTargetActive = true;
     }
@@ -277,7 +294,6 @@ public class SequentialAgent : Agent
 
         var dir = new Vector3(continuousAction[0], 0f, continuousAction[1]).normalized;
         transform.localPosition += dir * Time.deltaTime * moveSpeed;
-
         if (dir.magnitude > 0.5f)
         {
             Quaternion targetRot = Quaternion.LookRotation(dir);
@@ -285,9 +301,8 @@ public class SequentialAgent : Agent
         }
 
         string animParam = dir.magnitude > 0.5f ? "Walk" : "Idle";
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName(animParam))
+        if (animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Split('|')[1] != animParam.ToLower())
         {
-            Debug.Log($"{animParam} (isTargetActive = {isTargetActive})");
             animator.SetTrigger(animParam);
         }
         AddReward(-0.001f);

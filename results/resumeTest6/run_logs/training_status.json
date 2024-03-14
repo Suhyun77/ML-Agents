@@ -1,0 +1,65 @@
+{
+    "CatBrain": {
+        "checkpoints": [
+            {
+                "steps": 35499940,
+                "file_path": "results\\resumeTest6\\CatBrain\\CatBrain-35499940.onnx",
+                "reward": null,
+                "creation_time": 1710400247.6476874,
+                "auxillary_file_paths": [
+                    "results\\resumeTest6\\CatBrain\\CatBrain-35499940.pt"
+                ]
+            },
+            {
+                "steps": 35999972,
+                "file_path": "results\\resumeTest6\\CatBrain\\CatBrain-35999972.onnx",
+                "reward": null,
+                "creation_time": 1710400574.4788923,
+                "auxillary_file_paths": [
+                    "results\\resumeTest6\\CatBrain\\CatBrain-35999972.pt"
+                ]
+            },
+            {
+                "steps": 36499940,
+                "file_path": "results\\resumeTest6\\CatBrain\\CatBrain-36499940.onnx",
+                "reward": null,
+                "creation_time": 1710400897.8618693,
+                "auxillary_file_paths": [
+                    "results\\resumeTest6\\CatBrain\\CatBrain-36499940.pt"
+                ]
+            },
+            {
+                "steps": 36999972,
+                "file_path": "results\\resumeTest6\\CatBrain\\CatBrain-36999972.onnx",
+                "reward": null,
+                "creation_time": 1710401231.5903504,
+                "auxillary_file_paths": [
+                    "results\\resumeTest6\\CatBrain\\CatBrain-36999972.pt"
+                ]
+            },
+            {
+                "steps": 37001892,
+                "file_path": "results\\resumeTest6\\CatBrain\\CatBrain-37001892.onnx",
+                "reward": null,
+                "creation_time": 1710401368.0685356,
+                "auxillary_file_paths": [
+                    "results\\resumeTest6\\CatBrain\\CatBrain-37001892.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 37001892,
+            "file_path": "results\\resumeTest6\\CatBrain.onnx",
+            "reward": null,
+            "creation_time": 1710401368.0685356,
+            "auxillary_file_paths": [
+                "results\\resumeTest6\\CatBrain\\CatBrain-37001892.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.0.0",
+        "torch_version": "1.13.1+cu117"
+    }
+}
