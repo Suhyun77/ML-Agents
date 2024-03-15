@@ -1,5 +1,6 @@
 using UnityEngine;
 using RootMotion.FinalIK;
+using TMPro;
 
 public class InteractionControl : MonoBehaviour
 {

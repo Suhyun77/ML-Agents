@@ -7,11 +7,7 @@ using System.Collections.Generic;
 using TMPro;
 using Cysharp.Threading.Tasks;
 using System;
-using Google.Protobuf.WellKnownTypes;
-using Unity.VisualScripting;
 using UnityEngine.UI;
-
-public enum TargetState { None, target1, target2, target3 }
 
 #region Past Code
 //public class SequentialAgent : Agent
@@ -163,13 +159,15 @@ public class SequentialAgent : Agent
     [SerializeField] Transform gateRoot;
     [SerializeField] List<Transform> gateList;
     [SerializeField] TMP_Text agentScoreTxt;
-    [SerializeField] Button touchCatBtn;
 
     public Animator animator;
     public int agentScore;
     public bool isTargetActive;
     public int currActiveTargetCount;
     public bool isTouchFinished;
+    public Transform manTr;
+
+    private Vector3 dir;
 
     #endregion
 
@@ -183,8 +181,6 @@ public class SequentialAgent : Agent
         {
             targetList.Add(targetRoot.GetChild(i));
         }
-
-        // currTargetState = TargetState.None;
     }
 
     public override void OnEpisodeBegin()
@@ -207,6 +203,12 @@ public class SequentialAgent : Agent
     {
         if (isTargetActive)
             MoveAgent(actions);
+        else
+        {
+            if (animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Split('|')[1] 
+        != "sit" && dir.magnitude > 0)
+            animator.SetTrigger("Sit");
+        }
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -235,25 +237,29 @@ public class SequentialAgent : Agent
             other.gameObject.SetActive(false);
             AddReward(1);
 
-            if (other.gameObject.name == "Target2")
-            {
-                GetComponent<SequentialAgent>().enabled = false;
-                animator.SetTrigger("Sit");
-                await UniTask.WaitUntil(() => isTouchFinished);
-                GetComponent<SequentialAgent>().enabled = true;
-            }
+            // if (other.gameObject.name == "Target2")
+            // {
+            //     // GetComponent<SequentialAgent>().enabled = false;
+            //     // transform.forward = -manTr.forward;
+            //     isTargetActive = false;
+            //     // animator.SetTrigger("Sit");
+            //     // await UniTask.WaitUntil(() => animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Split('|')[1] == "sit");
+            //     // animator.SetTrigger("Sit");
+            //     await UniTask.Delay(TimeSpan.FromSeconds(3));
+            //     // GetComponent<SequentialAgent>().enabled = true;
+            //     isTargetActive = true;
+
+            // }
 
             if (currActiveTargetCount == 0)
             {
                 Debug.Log("End");
                 isTargetActive = false;
-                animator.SetTrigger("Sit");
                 await UniTask.Delay(TimeSpan.FromSeconds(5));
                 InitTrainEnvironment();
             }
         }
     }
-
     private (float, float) GetRandomGroundPos()
     {
         var extentsX = groundCol.bounds.extents.x - 0.5f;
@@ -278,9 +284,9 @@ public class SequentialAgent : Agent
     {
         foreach (var target in targetList)
         {
-            // target.gameObject.SetActive(false);
-            // var randPos = GetRandomGroundPos();
-            // target.localPosition = new Vector3(randPos.Item1, target.localPosition.y, randPos.Item2);
+        //     target.gameObject.SetActive(false);
+        //     var randPos = GetRandomGroundPos();
+        //     target.localPosition = new Vector3(randPos.Item1, target.localPosition.y, randPos.Item2);
             target.gameObject.SetActive(true);
         }
         currActiveTargetCount = activeTargetCount;
@@ -289,9 +295,10 @@ public class SequentialAgent : Agent
 
     private void MoveAgent(ActionBuffers actionBuffers)
     {
+        Debug.Log("MoveAgent");
         var continuousAction = actionBuffers.ContinuousActions;
 
-        var dir = new Vector3(continuousAction[0], 0f, continuousAction[1]).normalized;
+        dir = new Vector3(continuousAction[0], 0f, continuousAction[1]).normalized;
         transform.localPosition += dir * Time.deltaTime * moveSpeed;
 
         if (dir.magnitude > 0.5f)
@@ -299,28 +306,18 @@ public class SequentialAgent : Agent
             Quaternion targetRot = Quaternion.LookRotation(dir);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 7f);
         }
-
         string animParam = dir.magnitude > 0.5f ? "Walk" : "Idle";
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName(animParam))
+        if (animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.Split('|')[1] 
+        != animParam.ToLower())
         {
-            Debug.Log($"{animParam} (isTargetActive = {isTargetActive})");
             animator.SetTrigger(animParam);
         }
         AddReward(-0.001f);
     }
 
-    // private void SetTargetState(TargetState state)
-    // {
-    //     switch(state)
-    //     {
-    //         // 
-    //         case TargetState.target1:
-
-    //             break;
-    //         case TargetState.target2:
-    //             break;
-    //         case TargetState.target3:
-    //             break;
-    //     }
-    // }
+    public AudioClip miauSound;
+    private void OnMiau()
+    {
+        AudioSource.PlayClipAtPoint(miauSound, Camera.main.transform.position);
+    }
 }
