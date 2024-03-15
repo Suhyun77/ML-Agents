@@ -5871,14 +5871,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 276719584}
     m_Modifications:
-    - target: {fileID: 1394007331624678489, guid: 3f6ee495a5907dc4790b773457599fb9, type: 3}
-      propertyPath: m_Model
-      value: 
-      objectReference: {fileID: 5022602860645237092, guid: 735804c079bf2cb448a8c3b6984efed6, type: 3}
-    - target: {fileID: 1394007331624678489, guid: 3f6ee495a5907dc4790b773457599fb9, type: 3}
-      propertyPath: m_BehaviorType
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 2351750275098783593, guid: 3f6ee495a5907dc4790b773457599fb9, type: 3}
       propertyPath: m_Name
       value: CatTraining
