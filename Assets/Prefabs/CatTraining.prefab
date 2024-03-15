@@ -1048,7 +1048,7 @@ MonoBehaviour:
   targetRoot: {fileID: 4174015044876323549}
   targetSpawnAreaRoot: {fileID: 7628180101280530506}
   trainMode: 0
-  oneTargetIdx: 3
+  oneTargetIdx: 0
 --- !u!1 &2461604540625941050
 GameObject:
   m_ObjectHideFlags: 0
@@ -2795,8 +2795,6 @@ GameObject:
   - component: {fileID: 1668790565198718765}
   - component: {fileID: 169491776521065345}
   - component: {fileID: 4141133545476211465}
-  - component: {fileID: 731803309079905957}
-  - component: {fileID: 50325368143436211}
   m_Layer: 0
   m_Name: CatAgent
   m_TagString: Untagged
@@ -2863,7 +2861,7 @@ MonoBehaviour:
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
-  m_Model: {fileID: 5022602860645237092, guid: 735804c079bf2cb448a8c3b6984efed6, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 1
   m_BehaviorName: CatBrain
@@ -2958,43 +2956,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &731803309079905957
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5807554139429734033}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a6da8f78a394c6ab027688eab81e04d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debugCommandLineOverride: 
---- !u!114 &50325368143436211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5807554139429734033}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df0f8be9a37d6486498061e2cbc4cd94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RootBody: {fileID: 1668790565198718765}
-  VirtualRoot: {fileID: 7897044125203277657}
-  Settings:
-    UseModelSpaceTranslations: 0
-    UseModelSpaceRotations: 0
-    UseLocalSpaceTranslations: 1
-    UseLocalSpaceRotations: 1
-    UseModelSpaceLinearVelocity: 1
-    UseLocalSpaceLinearVelocity: 0
-    UseJointPositionsAndAngles: 0
-    UseJointForces: 0
-  sensorName: 
 --- !u!1 &5891369907220417587
 GameObject:
   m_ObjectHideFlags: 0
