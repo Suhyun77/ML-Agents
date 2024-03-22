@@ -8,6 +8,8 @@ namespace Anipen.AI_NPC_Demo
     public class Actor : MonoBehaviour
     {
         #region Members
+        [SerializeField] Transform modelRoot;
+
         private Animator animator;
         private NavMeshAgent navMeshAgent;
 
